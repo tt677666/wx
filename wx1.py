@@ -17,7 +17,9 @@ conf.read("wx.conf")
 conf.add_section("new_section")
 conf.set("new_section", "start_flag", "stop")
 conf.set("new_section", "reserve_time", "60")
+conf.set("new_section", "lottle_flag", "a1 b1 c1 d1 e1 f1 f2 g1 g2 g3 h1 h2 h3 h4 z1 z2")
 conf.write(open("wx.conf","w"))
+
 
 qun_name = u'微信群聊test'
 qun_id = ''
@@ -29,7 +31,104 @@ def logg(log_str):
 	with open('log.txt','a') as f:
 		f.write(time.strftime('%Y-%m-%d_%H-%M-%S')+' '+log_str+'\n\r')
 
-		
+
+
+def lottle_check_z1(user_lottle,real_lottle):
+	tmp_list=[]
+	result = False
+	while len(user_lottle)>0:
+		tmp_list.append(user_lottle[:2])
+		user_lottle = user_lottle[2:]
+	for l in tmp_list:
+		if l in real_lottle.split(' ')[:3]:
+			result = True
+		else:
+			result = False
+	return result
+
+def lottle_check_z2(user_lottle,real_lottle):
+	tmp_list=[]
+	result = False
+	while len(user_lottle)>0:
+		tmp_list.append(user_lottle[:2])
+		user_lottle = user_lottle[2:]
+	if tmp1_list == real_lottle.split(' ')[:3]:
+		result = True
+	else:
+		result = False
+	return result
+	
+def lottle_check(user_lottle,real_lottle):
+	tmp_list=[]
+	result = False
+	while len(user_lottle)>0:
+		tmp_list.append(user_lottle[:2])
+		user_lottle = user_lottle[2:]
+	for l in tmp_list:
+		if l in real_lottle.split(' '):
+			result = True
+		else:
+			result = False
+	return result
+
+def winning_check(lottle):
+	conf = ConfigParser.ConfigParser()
+	conf.read("wx.conf")
+	flags = conf.get('new_section','lottle_flag')
+	with open('lottle_order.txt','r') as f:
+		for l in f.readlines():
+			if flags.find(l.split(' ')[3]) >=0 :
+				if l.split(' ')[3] == 'a1':
+					if lottle_check(l.split(' ')[4],lottle):
+						user_add_money(l.split(' ')[0],8)
+				if l.split(' ')[3] == 'b1':
+					if lottle_check(l.split(' ')[4],lottle):
+						user_add_money(l.split(' ')[0],16)
+				if l.split(' ')[3] == 'c1':
+					if lottle_check(l.split(' ')[4],lottle):
+						user_add_money(l.split(' ')[0],24)
+				if l.split(' ')[3] == 'd1':
+					if lottle_check(l.split(' ')[4],lottle):
+						user_add_money(l.split(' ')[0],80)
+				if l.split(' ')[3] == 'e1':
+					if lottle_check(l.split(' ')[4],lottle):
+						user_add_money(l.split(' ')[0],320)
+				if l.split(' ')[3] == 'f1':
+					if lottle_check(l.split(' ')[4],lottle):
+						user_add_money(l.split(' ')[0],320)
+				if l.split(' ')[3] == 'f2':
+					if lottle_check(l.split(' ')[4],lottle):
+						user_add_money(l.split(' ')[0],1920)
+				if l.split(' ')[3] == 'g1':
+					if lottle_check(l.split(' ')[4],lottle):
+						user_add_money(l.split(' ')[0],320)
+				if l.split(' ')[3] == 'g2':
+					if lottle_check(l.split(' ')[4],lottle):
+						user_add_money(l.split(' ')[0],1920)
+				if l.split(' ')[3] == 'g3':
+					if lottle_check(l.split(' ')[4],lottle):
+						user_add_money(l.split(' ')[0],6720)
+				if l.split(' ')[3] == 'h1':
+					if lottle_check(l.split(' ')[4],lottle):
+						user_add_money(l.split(' ')[0],320)
+				if l.split(' ')[3] == 'h2':
+					if lottle_check(l.split(' ')[4],lottle):
+						user_add_money(l.split(' ')[0],1920)
+				if l.split(' ')[3] == 'h3':
+					if lottle_check(l.split(' ')[4],lottle):
+						user_add_money(l.split(' ')[0],6720)
+				if l.split(' ')[3] == 'h4':
+					if lottle_check(l.split(' ')[4],lottle):
+						user_add_money(l.split(' ')[0],17920)
+				if l.split(' ')[3] == 'z1':
+					if lottle_check_z1(l.split(' ')[4],lottle):
+						user_add_money(l.split(' ')[0],1300)
+				if l.split(' ')[3] == 'z2':
+					if lottle_check_z2(l.split(' ')[4],lottle):
+						user_add_money(l.split(' ')[0],8000)
+			else:
+				print 'this lottle flags closed'
+			
 #按照长度2切割下注的号码		
 def cut_num(num):
 	tmp_list = []
@@ -62,46 +161,46 @@ def cut_num(num):
 		
 		
 #检测用户发送的投注格式是否正确
-def format_check(user_msg):
+def format_check(usr,user_msg):
 	rule_num = user_msg.split(' ')[2]
 	lottle_num = user_msg.split(' ')[3]
 	if rule_num == 'a1':
-		if len(lottle_num) == 2 and  cut_num(lottle_num) = True:
+		if len(lottle_num) == 2 and  cut_num(lottle_num) == True and user_min_money(usr,2) == True:
 			return True
 		else:
 			return False
 	if rule_num == 'b1':
-		if len(lottle_num) == 4 and  cut_num(lottle_num) = True:
+		if len(lottle_num) == 4 and  cut_num(lottle_num) == True and user_min_money(usr,2) == True :
 			return True
 		else:
 			return False
 	if rule_num == 'c1' or rule_num == 'z1' or rule_num == 'z2':
-		if len(lottle_num) == 6 and  cut_num(lottle_num) = True:
+		if len(lottle_num) == 6 and  cut_num(lottle_num) == True and user_min_money(usr,2) == True:
 			return True
 		else:
 			return False
 	if rule_num == 'd1':
-		if len(lottle_num) == 8 and  cut_num(lottle_num) = True:
+		if len(lottle_num) == 8 and  cut_num(lottle_num) == True and user_min_money(usr,2) == True:
 			return True
 		else:
 			return False
 	if rule_num == 'e1':
-		if len(lottle_num) == 10 and  cut_num(lottle_num) = True:
+		if len(lottle_num) == 10 and  cut_num(lottle_num) == True and user_min_money(usr,2) == True:
 			return True
 		else:
 			return False
 	if rule_num == 'f1' or rule_num == 'f2':
-		if len(lottle_num) == 12 and  cut_num(lottle_num) = True:
+		if len(lottle_num) == 12 and  cut_num(lottle_num) == True and user_min_money(usr,12) == True:
 			return True
 		else:
 			return False
 	if rule_num == 'g1' or rule_num == 'g2' or rule_num == 'g3':
-		if len(lottle_num) == 14 and  cut_num(lottle_num) = True:
+		if len(lottle_num) == 14 and  cut_num(lottle_num) == True and user_min_money(usr,43) == True:
 			return True
 		else:
 			return False
 	if rule_num == 'h1' or rule_num == 'h2' or rule_num == 'h3'  or rule_num == 'h4':
-		if len(lottle_num) == 16 and  cut_num(lottle_num) = True:
+		if len(lottle_num) == 16 and  cut_num(lottle_num) == True and user_min_money(usr,112) == True:
 			return True
 		else:
 			return False
@@ -110,28 +209,57 @@ def format_check(user_msg):
 
 #获取消息后判断用户是否存在于用户积分表(dict方式)中
 def user_money(user_name):
+	result = False
+	try:
+		f = shelve.open('user.db','c')
+		if f.has_key[user_name]:
+			result = True
+		else:
+			f[user_name] = int(0)
+			result = False
+	finally:
+		f.close()
+	return result
+
+
+	
+def user_add_money(user_name,count):
 
 	try:
 		f = shelve.open('user.db','c')
 		if f.has_key[user_name]:
-			pass
-		else:
-			f[user_name] = 0
+			f[user_name] = f[user_name] + int(count) 
 	finally:
 		f.close()
-
+		
+def user_min_money(user_name,count):
+	result = True
+	try:
+		f = shelve.open('user.db','c')
+		if f.has_key[user_name]:
+			if f[user_name] - count >= 0:
+				f[user_name] = f[user_name] - count
+			else:
+				result = False
+				print (u'余额不足')
+	finally:
+		f.close()		
+	
+	return result
 
 #检测聊天记录是否以"touzhu"开头,如果是则将消息检测后存入"lottle_order.txt"表(文本),并将消息计入日志
 def check_order(usr,content):
+	if content.split(' ')[0] == 'guanli':
+		pass
 	if content.split(' ')[0] == 'touzhu':
-		if format_check(content) == True:
+		if format_check(usr,content) == True:
 			with open ('lottle_order.txt','a') as f:
 				f.write(usr+ ' ' +content + '\n')
 		else:
 			print 'format wrong'
 			
 		
-	
+
 def init_data():
 
 	global qun_id,qun_name
@@ -185,8 +313,10 @@ def group_reply_text(msg):
 	if msg['Type'] == TEXT:
 		for item in chatrooms:
 			if item['UserName'] == chatroom_id:
-				user_money(username)
-				check_order(username,msg['Content'])
+				
+				if user_money(username):
+					check_order(username,msg['Content'])
+				
 				print (username, msg['Content']), item['UserName']
 				#itchat.send('%s\n%s' % (username, msg['Content']), item['UserName'])
 
@@ -217,6 +347,7 @@ def kaijiang(qun_id):
 			if result_tmp != result:
 				#itchat.send('%s\n%s\n%s\n%s' % (u'======== 开奖结果========',r.json()[0]['CreateTime'], r.json()[0]['IssueName'],result), qun_id)
 				#开始统计上轮中奖结果（需要reply线程记录上轮的投注消息）
+				winning_check(result)
 				#告诉reply线程开始响应下轮投注消息
 				time.sleep(1)
 				conf.set("new_section", "start_flag", "start")
