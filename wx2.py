@@ -18,6 +18,8 @@ import threading,time,requests,ConfigParser,os,shelve
 
 qun_name = u'微信群聊test'
 qun_id = ''
+#chatroom_ids = {}
+#chatrooms = {}
 
 def mange_config(action,sectio,p,flag):
 	cfg = ConfigParser.ConfigParser()
@@ -227,10 +229,12 @@ def format_check(usr,user_msg):
 
 #获取消息后判断用户是否存在于用户积分表(dict方式)中
 def user_money(user_name):
+	user_name = user_name.encode('utf-8')
 	result = False
 	try:
 		f = shelve.open('user.db','c')
-		if f.has_key[user_name]:
+		
+		if f.has_key(user_name):
 			result = True
 		else:
 			f[user_name] = int(0)
@@ -239,22 +243,23 @@ def user_money(user_name):
 		f.close()
 	return result
 
-
-	
 def user_add_money(user_name,count):
-
+	user_name = user_name.encode('utf-8')
 	try:
 		f = shelve.open('user.db','c')
-		if f.has_key[user_name]:
+		if f.has_key(user_name):
 			f[user_name] = f[user_name] + int(count) 
+		else:
+			print 'user_add_money not found user'
 	finally:
 		f.close()
 		
 def user_min_money(user_name,count):
+	user_name = user_name.encode('utf-8')
 	result = True
 	try:
 		f = shelve.open('user.db','c')
-		if f.has_key[user_name]:
+		if f.has_key(user_name):
 			if f[user_name] - int(count) >= 0:
 				f[user_name] = f[user_name] - int(count)
 			else:
@@ -279,10 +284,13 @@ def set_manage_flag(usr_name,content):
 		print u'unknow manage command'
 
 def get_usr_count(usr_name):
+	usr_name = usr_name.encode('utf-8')
 	try:
 		f = shelve.open('user.db','c')
-		if f.has_key[usr_name]:
+		if f.has_key(usr_name):
 			itchat.send('%s\n%s\n%s' % (u'======== 查询结果========',time.strftime('%Y-%m-%d_%H-%M-%S'), f[usr_name]), qun_id)
+		else:
+			print 'not found user'
 	finally:
 		f.close()		
 	
@@ -310,20 +318,25 @@ def check_order(usr,content):
 def init_data():
 
 	global qun_id,qun_name
-	itchat.auto_login(False)
-	chatrooms = itchat.get_chatrooms(update=True, contactOnly=True)
-	for k in chatrooms:
-		if k['NickName'] == qun_name:
-			qun_id = k['UserName']
+	
+	if os.path.exists('wx.conf'):
+		mange_config('set','new_section','start_flag','stop')
+	if os.path.exists('wx.conf') is False:
+		conf = ConfigParser.ConfigParser()
+		conf.read("wx.conf")
+		conf.add_section("new_section")
+		conf.set("new_section", u"start_flag", u"stop")
+		conf.set("new_section", u"delay_time", u"60")
+		conf.set("new_section", u"lottle_flag", u"a1 b1 c1 d1 e1 f1 f2 g1 g2 g3 h1 h2 h3 h4 z1 z2")
+		conf.write(open("wx.conf","w"))
+	if os.path.exists('lottle_order.txt'):
+		with open('lottle_order.txt','w') as f:
+			f.truncate()
+	if os.path.exists('lottle_order.txt') is False:
+		with open('lottle_order.txt','w') as f:
+			pass
 
-			
-			
-	chatroom_ids = [c['UserName'] for c in chatrooms]
-	#print chatroom_ids
-	#print '正在监测的群聊：', len(chatrooms), '个'
-	print ' '.join([item['NickName'] for item in chatrooms])
-
-
+	
 def network_time(ts):
 	ltime= time.strptime(ts[5:25], "%d %b %Y %H:%M:%S")
 	ttime=time.localtime(time.mktime(ltime)+8*60*60)
@@ -342,6 +355,7 @@ def convert2timestamp(a):
 # isGroupChat=True表示为群聊消息
 @itchat.msg_register([TEXT, SHARING], isGroupChat=True)
 def group_reply_text(msg):
+	
 	# 消息来自于哪个群聊
 	chatroom_id = msg['FromUserName']
 	# 发送者的昵称
@@ -413,21 +427,18 @@ def kaijiang(qun_id):
 		time.sleep(15)
 if __name__ == "__main__":
 	init_data()
-	if os.path.exists('wx.conf'):
-		mange_config('set','new_section','start_flag','stop')
-	if os.path.exists('wx.conf') is False:
-		conf = ConfigParser.ConfigParser()
-		conf.read("wx.conf")
-		conf.add_section("new_section")
-		conf.set("new_section", u"start_flag", u"stop")
-		conf.set("new_section", u"delay_time", u"60")
-		conf.set("new_section", u"lottle_flag", u"a1 b1 c1 d1 e1 f1 f2 g1 g2 g3 h1 h2 h3 h4 z1 z2")
-		conf.write(open("wx.conf","w"))
-	if os.path.exists('lottle_order.txt'):
-		pass
-	if os.path.exists('lottle_order.txt') is False:
-		with open('lottle_order.txt','w') as f:
-			pass
+	
+	itchat.auto_login(False)
+	chatrooms = itchat.get_chatrooms(update=True, contactOnly=True)
+	for k in chatrooms:
+		if k['NickName'] == qun_name:
+			qun_id = k['UserName']
+
+	chatroom_ids = [c['UserName'] for c in chatrooms]
+	#print chatroom_ids
+	#print '正在监测的群聊：', len(chatrooms), '个'
+	print ' '.join([item['NickName'] for item in chatrooms])
+	
 	t = threading.Thread(target=kaijiang,args=(qun_id,))
 	t.start()
 	z = threading.Thread(target=reply,args=())
