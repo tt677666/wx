@@ -3,7 +3,7 @@
 
 import sys
 reload(sys)
-sys.setdefaultencoding("utf8")
+sys.setdefaultencoding("utf-8")
 
 
 
@@ -16,7 +16,7 @@ import threading,time,requests,ConfigParser,os,shelve
 
 
 
-qun_name = u'微信群聊test'
+#qun_name = u'微信群聊test'
 qun_id = ''
 #chatroom_ids = {}
 #chatrooms = {}
@@ -33,7 +33,8 @@ def mange_config(action,sectio,p,flag):
 	cfg.write(open("wx.conf","w"))
 #write log
 def logg(log_str):
-	with open('log.txt','a') as f:
+	fname = 'log_'+time.strftime('%Y-%m-%d')+'.log'
+	with open(fname,'a') as f:
 		f.write(time.strftime('%Y-%m-%d_%H-%M-%S')+' '+log_str+'\n\r')
 
 
@@ -89,66 +90,64 @@ def lottle_check(user_lottle,real_lottle):
 	return result
 
 def winning_check(lottle):
-	#conf = ConfigParser.ConfigParser()
-	#conf.read("wx.conf")
-	#flags = conf.get('new_section','lottle_flag')
 	flags = mange_config('get','new_section','lottle_flag','nothing')
 	with open('lottle_order.txt','r') as f:
 		for l in f.readlines():
-			if flags.find(l.split(' ')[3]) >=0 :
-				if l.split(' ')[3] == 'a1':
-					if lottle_check_a1(l.split(' ')[4],lottle):
+			if flags.find(l.split(' ')[2]) >=0 :
+				if l.split(' ')[2] == 'a1':
+					if lottle_check_a1(l.split(' ')[3],lottle):
 						user_add_money(l.split(' ')[0],24)
-				if l.split(' ')[3] == 'b1':
-					if lottle_check(l.split(' ')[4],lottle):
+				if l.split(' ')[2] == 'b1':
+					if lottle_check(l.split(' ')[3],lottle):
 						user_add_money(l.split(' ')[0],8)
-				if l.split(' ')[3] == 'c1':
-					if lottle_check(l.split(' ')[4],lottle):
+				if l.split(' ')[2] == 'c1':
+					if lottle_check(l.split(' ')[3],lottle):
 						user_add_money(l.split(' ')[0],24)
-				if l.split(' ')[3] == 'd1':
+				if l.split(' ')[2] == 'd1':
 					if lottle_check(l.split(' ')[4],lottle):
 						user_add_money(l.split(' ')[0],80)
 				if l.split(' ')[3] == 'e1':
-					if lottle_check(l.split(' ')[4],lottle):
+					if lottle_check(l.split(' ')[3],lottle):
 						user_add_money(l.split(' ')[0],320)
-				if l.split(' ')[3] == 'f1':
-					if lottle_check(l.split(' ')[4],lottle):
+				if l.split(' ')[2] == 'f1':
+					if lottle_check(l.split(' ')[3],lottle):
 						user_add_money(l.split(' ')[0],320)
-				if l.split(' ')[3] == 'f2':
-					if lottle_check(l.split(' ')[4],lottle):
+				if l.split(' ')[2] == 'f2':
+					if lottle_check(l.split(' ')[3],lottle):
 						user_add_money(l.split(' ')[0],1920)
-				if l.split(' ')[3] == 'g1':
-					if lottle_check(l.split(' ')[4],lottle):
+				if l.split(' ')[2] == 'g1':
+					if lottle_check(l.split(' ')[3],lottle):
 						user_add_money(l.split(' ')[0],320)
-				if l.split(' ')[3] == 'g2':
-					if lottle_check(l.split(' ')[4],lottle):
+				if l.split(' ')[2] == 'g2':
+					if lottle_check(l.split(' ')[3],lottle):
 						user_add_money(l.split(' ')[0],1920)
-				if l.split(' ')[3] == 'g3':
-					if lottle_check(l.split(' ')[4],lottle):
+				if l.split(' ')[2] == 'g3':
+					if lottle_check(l.split(' ')[3],lottle):
 						user_add_money(l.split(' ')[0],6720)
-				if l.split(' ')[3] == 'h1':
-					if lottle_check(l.split(' ')[4],lottle):
+				if l.split(' ')[2] == 'h1':
+					if lottle_check(l.split(' ')[3],lottle):
 						user_add_money(l.split(' ')[0],320)
-				if l.split(' ')[3] == 'h2':
-					if lottle_check(l.split(' ')[4],lottle):
+				if l.split(' ')[2] == 'h2':
+					if lottle_check(l.split(' ')[3],lottle):
 						user_add_money(l.split(' ')[0],1920)
-				if l.split(' ')[3] == 'h3':
-					if lottle_check(l.split(' ')[4],lottle):
+				if l.split(' ')[2] == 'h3':
+					if lottle_check(l.split(' ')[3],lottle):
 						user_add_money(l.split(' ')[0],6720)
-				if l.split(' ')[3] == 'h4':
-					if lottle_check(l.split(' ')[4],lottle):
+				if l.split(' ')[2] == 'h4':
+					if lottle_check(l.split(' ')[3],lottle):
 						user_add_money(l.split(' ')[0],17920)
-				if l.split(' ')[3] == 'z1':
-					if lottle_check_z1(l.split(' ')[4],lottle):
+				if l.split(' ')[2] == 'z1':
+					if lottle_check_z1(l.split(' ')[3],lottle):
 						user_add_money(l.split(' ')[0],1300)
-				if l.split(' ')[3] == 'z2':
-					if lottle_check_z2(l.split(' ')[4],lottle):
+				if l.split(' ')[2] == 'z2':
+					if lottle_check_z2(l.split(' ')[3],lottle):
 						user_add_money(l.split(' ')[0],8000)
 			else:
 				print 'this lottle flags closed'
 	#清空投注记录表
 	with open('lottle_order.txt','w') as f:
 		f.truncate()
+
 #按照长度2切割下注的号码		
 def cut_num(num):
 	tmp_list = []
@@ -182,44 +181,49 @@ def cut_num(num):
 		
 #检测用户发送的投注格式是否正确
 def format_check(usr,user_msg):
-	rule_num = user_msg.split(' ')[2]
-	lottle_num = user_msg.split(' ')[3]
-	if rule_num == 'a1':
+	flags = mange_config('get','new_section','lottle_flag','nothing')
+	rule_num = user_msg.split(' ')[1]
+	#print 'rule_num is ', rule_num,type(rule_num) 
+	lottle_num = user_msg.split(' ')[2]
+	#print 'lottle_num is ', lottle_num,type(lottle_num)
+	if rule_num == 'a1' and flags.find(rule_num)>=0:
+		print 'i am in'
 		if len(lottle_num) == 2 and  cut_num(lottle_num) == True and user_min_money(usr,2) == True:
+			print 'i\'m in'
 			return True
 		else:
 			return False
-	if rule_num == 'b1':
+	if rule_num == 'b1' and flags.find(rule_num)>=0:
 		if len(lottle_num) == 4 and  cut_num(lottle_num) == True and user_min_money(usr,2) == True :
 			return True
 		else:
 			return False
-	if rule_num == 'c1' or rule_num == 'z1' or rule_num == 'z2':
+	if rule_num == 'c1' or rule_num == 'z1' or rule_num == 'z2' and flags.find(rule_num)>=0:
 		if len(lottle_num) == 6 and  cut_num(lottle_num) == True and user_min_money(usr,2) == True:
 			return True
 		else:
 			return False
-	if rule_num == 'd1':
+	if rule_num == 'd1'  and flags.find(rule_num)>=0:
 		if len(lottle_num) == 8 and  cut_num(lottle_num) == True and user_min_money(usr,2) == True:
 			return True
 		else:
 			return False
-	if rule_num == 'e1':
+	if rule_num == 'e1' and flags.find(rule_num)>=0:
 		if len(lottle_num) == 10 and  cut_num(lottle_num) == True and user_min_money(usr,2) == True:
 			return True
 		else:
 			return False
-	if rule_num == 'f1' or rule_num == 'f2':
+	if rule_num == 'f1' or rule_num == 'f2' and flags.find(rule_num)>=0:
 		if len(lottle_num) == 12 and  cut_num(lottle_num) == True and user_min_money(usr,12) == True:
 			return True
 		else:
 			return False
-	if rule_num == 'g1' or rule_num == 'g2' or rule_num == 'g3':
+	if rule_num == 'g1' or rule_num == 'g2' or rule_num == 'g3' and flags.find(rule_num)>=0:
 		if len(lottle_num) == 14 and  cut_num(lottle_num) == True and user_min_money(usr,43) == True:
 			return True
 		else:
 			return False
-	if rule_num == 'h1' or rule_num == 'h2' or rule_num == 'h3'  or rule_num == 'h4':
+	if rule_num == 'h1' or rule_num == 'h2' or rule_num == 'h3'  or rule_num == 'h4' and flags.find(rule_num)>=0:
 		if len(lottle_num) == 16 and  cut_num(lottle_num) == True and user_min_money(usr,112) == True:
 			return True
 		else:
@@ -271,24 +275,28 @@ def user_min_money(user_name,count):
 	return result
 
 def set_manage_flag(usr_name,content):
+	content = content.encode('utf-8')
 	#name = conf.get("new_section","manage_name")
-
+	print 'in set_manage_flag'
 	if content.split(' ')[1] == 'moshi':
-		#conf.set("new_section", "lottle_flag",content.split(' ')[2] )
-		#conf.write(open("wx.conf","w"))
+		print 'in set moshi'
 		mange_config('set','new_section','lottle_flag',content.split(' ')[2])
 	if content.split(' ')[1] == 'yanchi':
-		#conf.set("new_section", "delay_time",content.split(' ')[2] )
+		print 'in set yanchi'
 		mange_config('set','new_section','delay_time',content.split(' ')[2])
 	else:
 		print u'unknow manage command'
 
 def get_usr_count(usr_name):
+	'i am in get_usr_count'
+	print usr_name
 	usr_name = usr_name.encode('utf-8')
 	try:
 		f = shelve.open('user.db','c')
 		if f.has_key(usr_name):
-			itchat.send('%s\n%s\n%s' % (u'======== 查询结果========',time.strftime('%Y-%m-%d_%H-%M-%S'), f[usr_name]), qun_id)
+			print usr_name
+			itchat.send('%s\n%s\n%s' % (u'======== 查询结果========',time.strftime('%Y-%m-%d %H:%M:%S'), f[usr_name]), qun_id)
+			print ('%s\n%s\n%s' % ('======== user_money_result========',time.strftime('%Y-%m-%d %H:%M:%S'), f[usr_name]), qun_id)
 		else:
 			print 'not found user'
 	finally:
@@ -296,7 +304,20 @@ def get_usr_count(usr_name):
 	
 #检测聊天记录是否以"touzhu"开头,如果是则将消息检测后存入"lottle_order.txt"表(文本),并将消息计入日志
 def check_order(usr,content):
-	#name = conf.get("new_section","manage_name")
+	content = content.encode('utf-8')
+	
+	name = mange_config('get','new_section','manage_name','nothing')
+	
+	if content.split(' ')[0] == 'touzhu':
+		if format_check(usr,content) == True:
+			with open ('lottle_order.txt','a') as f:
+				f.write(usr+ ' ' +content + '\n')
+		else:
+			print u'格式错误,余额不足,模式已关闭'
+
+def check_and_do_manage(usr,content):
+	'i am in check_and_do_manage'
+	content = content.encode('utf-8')
 	name = mange_config('get','new_section','manage_name','nothing')
 	if content.split(' ')[0] == 'guanli'  and usr == name:
 		set_manage_flag(usr,content)
@@ -305,19 +326,13 @@ def check_order(usr,content):
 	if content.split(' ')[0] == 'jianfen' and usr == name:
 		user_min_money(content.split(' ')[1],content.split(' ')[2])
 	if content == 'chaxun':
+		'i am in chaxun_if'
 		get_usr_count(usr)
-	if content.split(' ')[0] == 'touzhu':
-		if format_check(usr,content) == True:
-			with open ('lottle_order.txt','a') as f:
-				f.write(usr+ ' ' +content + '\n')
-		else:
-			print 'format wrong'
-			
 
 
 def init_data():
 
-	global qun_id,qun_name
+	global qun_id
 	
 	if os.path.exists('wx.conf'):
 		mange_config('set','new_section','start_flag','stop')
@@ -325,9 +340,9 @@ def init_data():
 		conf = ConfigParser.ConfigParser()
 		conf.read("wx.conf")
 		conf.add_section("new_section")
-		conf.set("new_section", u"start_flag", u"stop")
-		conf.set("new_section", u"delay_time", u"60")
-		conf.set("new_section", u"lottle_flag", u"a1 b1 c1 d1 e1 f1 f2 g1 g2 g3 h1 h2 h3 h4 z1 z2")
+		conf.set("new_section", "start_flag", "stop")
+		conf.set("new_section", "delay_time", "60")
+		conf.set("new_section", "lottle_flag", "a1 b1 c1 d1 e1 f1 f2 g1 g2 g3 h1 h2 h3 h4 z1 z2")
 		conf.write(open("wx.conf","w"))
 	if os.path.exists('lottle_order.txt'):
 		with open('lottle_order.txt','w') as f:
@@ -353,14 +368,14 @@ def convert2timestamp(a):
 
 # 自动回复文本等类别的群聊消息
 # isGroupChat=True表示为群聊消息
-@itchat.msg_register([TEXT, SHARING], isGroupChat=True)
+@itchat.msg_register([TEXT, SHARING,NOTE], isGroupChat=True)
 def group_reply_text(msg):
 	
 	# 消息来自于哪个群聊
 	chatroom_id = msg['FromUserName']
 	# 发送者的昵称
 	username = msg['ActualNickName']
-
+	
 	# 消息并不是来自于需要同步的群
 	if not chatroom_id in chatroom_ids:
 		return
@@ -369,19 +384,37 @@ def group_reply_text(msg):
 		content = msg['Content']
 	elif msg['Type'] == SHARING:
 		content = msg['Text']
-
+	
+	if msg['Type'] == NOTE:
+		itchat.send('%s\n%s\n%s\n%s' % (u'======== 欢迎加入========',msg['Content'].split('\"')[3], u'请修改群昵称为自己的微信号',u'否则您将无法正常使用某些功能'), qun_id)
+		logg(msg['Content'].split('\"')[3] + '请修改群昵称为自己的微信号')
+		
 	# 根据消息类型转发至其他需要同步消息的群聊
 	if msg['Type'] == TEXT:
 		for item in chatrooms:
 			if item['UserName'] == chatroom_id:
 				
 				if user_money(username):
-					#if conf.get("new_section","start_flag") == 'start':
-					if mange_config('get','new_section','start_flag','nothing')  == 'start':
-						check_order(username,msg['Content'])
-				
+					if msg['Content'].split(' ')[0] == 'touzhu':
+						if mange_config('get','new_section','start_flag','nothing')  == 'start':
+							check_order(username,msg['Content'])
+						if mange_config('get','new_section','start_flag','nothing')  == 'stop':
+							#itchat.send('%s' % (u'======== 封板期间,无法投注========'), qun_id)
+							print('%s' % ('======== lottle_stop,cannot do it========'), qun_id)
+							
+					if msg['Content'].split(' ')[0] == 'guanli':
+						check_and_do_manage(username,msg['Content'])
+						
+					if msg['Content'].split(' ')[0] == 'shangfen':
+						check_and_do_manage(username,msg['Content'])
+						
+					if msg['Content'].split(' ')[0] == 'jianfen':
+						check_and_do_manage(username,msg['Content'])
+						
+					if msg['Content'].split(' ')[0] == 'chaxun':
+						check_and_do_manage(username,msg['Content'])
+						
 				print (username, msg['Content']), item['UserName']
-				#itchat.send('%s\n%s' % (username, msg['Content']), item['UserName'])
 
 
 def reply():
@@ -392,7 +425,7 @@ def kaijiang(qun_id):
 	while True:
 		while True:
 			try:
-				r = requests.post('http://sxhb.ws1.zs-zc.net/api/AwardNum/LottAwardInfoList',{'lott': '07', 'page': '1'})
+				r = requests.post('http://sxhb.ws1.zs-zc.net/api/AwardNum/LottAwardInfoList',{'lott': '07', 'size': '20'})
 				result = r.json()[0]['RaffleNumber']
 				result_time_hour = int(r.json()[0]['CreateTime'].split(' ')[1].split(':')[0])
 				result_time_min = int(r.json()[0]['CreateTime'].split(' ')[1].split(':')[1])
@@ -404,25 +437,28 @@ def kaijiang(qun_id):
 
 		# 取开奖时间的小时和分钟值，如果晚于21:50,则证明本日投注结束
 		if result_time_hour == 21 and result_time_min >= 50:
-			print u' 非投注时间范围'
+			#print u' 非投注时间范围'
+			pass
 		else:
-			print u'投注时间范围'
+			#print u'投注时间范围'
 			if result_tmp != 'tmp_str':
 				if result_tmp != result:
 					print 1
 					#itchat.send('%s\n%s\n%s\n%s' % (u'======== 开奖结果========',r.json()[0]['CreateTime'], r.json()[0]['IssueName'],result), qun_id)
-					#conf.set("new_section", "start_flag", "stop")
+					print('%s\n%s\n%s\n%s' % ('======== lottole_result========',r.json()[0]['CreateTime'], r.json()[0]['IssueName'],result), qun_id)
 					mange_config('set','new_section','start_flag','stop')
 					#开始统计上轮中奖结果（需要reply线程记录上轮的投注消息）
 					winning_check(result)
 					#告诉reply线程开始响应下轮投注消息
 					time.sleep(1)
-					#conf.set("new_section", "start_flag", "start")
 					mange_config('set','new_section','start_flag','start')
-					time.sleep(600 - (convert2timestamp(network_time(r.headers['Date'])) - convert2timestamp(r.json()[0]['CreateTime'])) - 15 - int(mange_config('get','new_section','delay_time','nothing')) )
-					#conf.set("new_section", "start_flag", "stop")
+					#itchat.send('%s\n%s\n' % (u'======== 开始投注========',int(r.json()[0]['IssueName'])+1), qun_id)
+					print('%s\n%s\n' % ('======== start_lotlle========',int(r.json()[0]['IssueName'])+1), qun_id)
+					time_to_sleep = 600 - (convert2timestamp(network_time(r.headers['Date'])) - convert2timestamp(r.json()[0]['CreateTime'])) - 15 - int(mange_config('get','new_section','delay_time','nothing'))
+					time.sleep(time_to_sleep)
 					mange_config('set','new_section','start_flag','stop')
-					#itchat.send('%s\n%s\n%s' % (u'======== 系统封板========',time.strftime('%Y-%m-%d_%H-%M-%S'),u'以上投注有效,现在停止接单'), qun_id)
+					#itchat.send('%s\n%s\n%s' % (u'======== 系统封板========',time.strftime('%Y-%m-%d %H:%M:%S'),u'以上投注有效,现在停止接单'), qun_id)
+					print('%s\n%s\n%s' % ('======== stop_lootle========',time.strftime('%Y-%m-%d %H:%M:%S'),'haha'), qun_id)
 			result_tmp = result
 		time.sleep(15)
 if __name__ == "__main__":
@@ -431,8 +467,8 @@ if __name__ == "__main__":
 	itchat.auto_login(False)
 	chatrooms = itchat.get_chatrooms(update=True, contactOnly=True)
 	for k in chatrooms:
-		if k['NickName'] == qun_name:
-			qun_id = k['UserName']
+		#if k['NickName'] == qun_name:
+		qun_id = k['UserName']
 
 	chatroom_ids = [c['UserName'] for c in chatrooms]
 	#print chatroom_ids
