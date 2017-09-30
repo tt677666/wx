@@ -39,7 +39,7 @@ def logg(log_str):
 
 
 
-def lottle_check_z1(user_lottle,real_lottle):
+def lottle_check_zu3(user_lottle,real_lottle):
 	tmp_list=[]
 	result = False
 	while len(user_lottle)>0:
@@ -52,7 +52,7 @@ def lottle_check_z1(user_lottle,real_lottle):
 			result = False
 	return result
 
-def lottle_check_z2(user_lottle,real_lottle):
+def lottle_check_qian3(user_lottle,real_lottle):
 	tmp_list=[]
 	result = False
 	while len(user_lottle)>0:
@@ -64,7 +64,7 @@ def lottle_check_z2(user_lottle,real_lottle):
 		result = False
 	return result
 	
-def lottle_check_a1(user_lottle,real_lottle):
+def lottle_check_ren1(user_lottle,real_lottle):
 	tmp_list=[]
 	result = False
 	while len(user_lottle)>0:
@@ -79,69 +79,98 @@ def lottle_check_a1(user_lottle,real_lottle):
 def lottle_check(user_lottle,real_lottle):
 	tmp_list=[]
 	result = False
+	mactch_times = 0
 	while len(user_lottle)>0:
 		tmp_list.append(user_lottle[:2])
 		user_lottle = user_lottle[2:]
 	for l in tmp_list:
 		if l in real_lottle.split(' '):
-			result = True
+			mactch_times = mactch_times + 1
 		else:
 			result = False
-	return result
+	return mactch_times
 
 def winning_check(lottle):
 	flags = mange_config('get','new_section','lottle_flag','nothing')
 	with open('lottle_order.txt','r') as f:
 		for l in f.readlines():
 			if flags.find(l.split(' ')[2]) >=0 :
-				if l.split(' ')[2] == 'a1':
-					if lottle_check_a1(l.split(' ')[3],lottle):
-						user_add_money(l.split(' ')[0],24)
-				if l.split(' ')[2] == 'b1':
-					if lottle_check(l.split(' ')[3],lottle):
-						user_add_money(l.split(' ')[0],8)
-				if l.split(' ')[2] == 'c1':
-					if lottle_check(l.split(' ')[3],lottle):
-						user_add_money(l.split(' ')[0],24)
-				if l.split(' ')[2] == 'd1':
-					if lottle_check(l.split(' ')[4],lottle):
-						user_add_money(l.split(' ')[0],80)
-				if l.split(' ')[3] == 'e1':
-					if lottle_check(l.split(' ')[3],lottle):
-						user_add_money(l.split(' ')[0],320)
-				if l.split(' ')[2] == 'f1':
-					if lottle_check(l.split(' ')[3],lottle):
-						user_add_money(l.split(' ')[0],320)
-				if l.split(' ')[2] == 'f2':
-					if lottle_check(l.split(' ')[3],lottle):
-						user_add_money(l.split(' ')[0],1920)
-				if l.split(' ')[2] == 'g1':
-					if lottle_check(l.split(' ')[3],lottle):
-						user_add_money(l.split(' ')[0],320)
+				if l.split(' ')[2] == 'ren1':
+					if lottle_check_ren1(l.split(' ')[3],lottle):
+						user_add_money(l.split(' ')[0],24*int(l.split(' ')[4]))
+						
+				if l.split(' ')[2] == 'ren2':
+					if lottle_check(l.split(' ')[3],lottle) == 2:
+						user_add_money(l.split(' ')[0],8*int(l.split(' ')[4]))
+						
+				if l.split(' ')[2] == 'ren3':
+					if lottle_check(l.split(' ')[3],lottle) == 3:
+						user_add_money(l.split(' ')[0],24*int(l.split(' ')[4]))
+						
+				if l.split(' ')[2] == 'ren4':
+					if lottle_check(l.split(' ')[4],lottle) == 4:
+						user_add_money(l.split(' ')[0],80*int(l.split(' ')[4]))
+						
+				if l.split(' ')[3] == 'ren5':
+					if lottle_check(l.split(' ')[3],lottle) == 5:
+						user_add_money(l.split(' ')[0],320*int(l.split(' ')[4]))
+						
+				if l.split(' ')[2] == '6-5':
+					if lottle_check(l.split(' ')[3],lottle) == 5:
+						user_add_money(l.split(' ')[0],320*int(l.split(' ')[4]))
+					if lottle_check(l.split(' ')[3],lottle) == 6:
+						user_add_money(l.split(' ')[0],1920*int(l.split(' ')[4]))
+				'''
+				if l.split(' ')[2] == '6-5':
+					if lottle_check(l.split(' ')[3],lottle) == 6:
+						user_add_money(l.split(' ')[0],1920*int(l.split(' ')[4]))
+				'''
+						
+				if l.split(' ')[2] == '7-5':
+					if lottle_check(l.split(' ')[3],lottle) == 5:
+						user_add_money(l.split(' ')[0],320*int(l.split(' ')[4]))
+					if lottle_check(l.split(' ')[3],lottle) == 6:
+						user_add_money(l.split(' ')[0],1920*int(l.split(' ')[4]))
+					if lottle_check(l.split(' ')[3],lottle) == 7:
+						user_add_money(l.split(' ')[0],6720*int(l.split(' ')[4]))
+				'''
 				if l.split(' ')[2] == 'g2':
-					if lottle_check(l.split(' ')[3],lottle):
-						user_add_money(l.split(' ')[0],1920)
+					if lottle_check(l.split(' ')[3],lottle) == 6:
+						user_add_money(l.split(' ')[0],1920*int(l.split(' ')[4]))
+						
 				if l.split(' ')[2] == 'g3':
-					if lottle_check(l.split(' ')[3],lottle):
-						user_add_money(l.split(' ')[0],6720)
-				if l.split(' ')[2] == 'h1':
-					if lottle_check(l.split(' ')[3],lottle):
-						user_add_money(l.split(' ')[0],320)
+					if lottle_check(l.split(' ')[3],lottle) == 7:
+						user_add_money(l.split(' ')[0],6720*int(l.split(' ')[4]))
+				'''
+				if l.split(' ')[2] == '8-5':
+					if lottle_check(l.split(' ')[3],lottle) == 5:
+						user_add_money(l.split(' ')[0],320*int(l.split(' ')[4]))
+					if lottle_check(l.split(' ')[3],lottle) == 6:
+						user_add_money(l.split(' ')[0],1920*int(l.split(' ')[4]))
+					if lottle_check(l.split(' ')[3],lottle) == 7:
+						user_add_money(l.split(' ')[0],6720*int(l.split(' ')[4]))
+					if lottle_check(l.split(' ')[3],lottle) == 8:
+						user_add_money(l.split(' ')[0],17920*int(l.split(' ')[4]))
+				'''
 				if l.split(' ')[2] == 'h2':
-					if lottle_check(l.split(' ')[3],lottle):
-						user_add_money(l.split(' ')[0],1920)
+					if lottle_check(l.split(' ')[3],lottle) == 6:
+						user_add_money(l.split(' ')[0],1920*int(l.split(' ')[4]))
+						
 				if l.split(' ')[2] == 'h3':
-					if lottle_check(l.split(' ')[3],lottle):
-						user_add_money(l.split(' ')[0],6720)
+					if lottle_check(l.split(' ')[3],lottle) == 7:
+						user_add_money(l.split(' ')[0],6720*int(l.split(' ')[4]))
+						
 				if l.split(' ')[2] == 'h4':
-					if lottle_check(l.split(' ')[3],lottle):
-						user_add_money(l.split(' ')[0],17920)
-				if l.split(' ')[2] == 'z1':
-					if lottle_check_z1(l.split(' ')[3],lottle):
-						user_add_money(l.split(' ')[0],1300)
-				if l.split(' ')[2] == 'z2':
-					if lottle_check_z2(l.split(' ')[3],lottle):
-						user_add_money(l.split(' ')[0],8000)
+					if lottle_check(l.split(' ')[3],lottle) == 8:
+						user_add_money(l.split(' ')[0],17920*int(l.split(' ')[4]))
+				'''
+				if l.split(' ')[2] == 'zu3':
+					if lottle_check_zu3(l.split(' ')[3],lottle):
+						user_add_money(l.split(' ')[0],1300*int(l.split(' ')[4]))
+						
+				if l.split(' ')[2] == 'qian3':
+					if lottle_check_qian3(l.split(' ')[3],lottle):
+						user_add_money(l.split(' ')[0],8000*int(l.split(' ')[4]))
 			else:
 				print 'this lottle flags closed'
 	#清空投注记录表
@@ -183,48 +212,53 @@ def cut_num(num):
 def format_check(usr,user_msg):
 	flags = mange_config('get','new_section','lottle_flag','nothing')
 	rule_num = user_msg.split(' ')[1]
+	try:
+		times = int(user_msg.split(' ')[3])
+	except:
+		return False
+	print user_msg,times
 	#print 'rule_num is ', rule_num,type(rule_num) 
 	lottle_num = user_msg.split(' ')[2]
 	#print 'lottle_num is ', lottle_num,type(lottle_num)
-	if rule_num == 'a1' and flags.find(rule_num)>=0:
+	if rule_num == 'ren1' and flags.find(rule_num)>=0:
 		print 'i am in'
-		if len(lottle_num) == 2 and  cut_num(lottle_num) == True and user_min_money(usr,2) == True:
+		if len(lottle_num) == 2 and  cut_num(lottle_num) == True and user_min_money(usr,2*times) == True:
 			print 'i\'m in'
 			return True
 		else:
 			return False
-	if rule_num == 'b1' and flags.find(rule_num)>=0:
-		if len(lottle_num) == 4 and  cut_num(lottle_num) == True and user_min_money(usr,2) == True :
+	if rule_num == 'ren2' and flags.find(rule_num)>=0:
+		if len(lottle_num) == 4 and  cut_num(lottle_num) == True and user_min_money(usr,2*times) == True :
 			return True
 		else:
 			return False
-	if rule_num == 'c1' or rule_num == 'z1' or rule_num == 'z2' and flags.find(rule_num)>=0:
-		if len(lottle_num) == 6 and  cut_num(lottle_num) == True and user_min_money(usr,2) == True:
+	if rule_num == 'ren3' or rule_num == 'zu3' or rule_num == 'qian3' and flags.find(rule_num)>=0:
+		if len(lottle_num) == 6 and  cut_num(lottle_num) == True and user_min_money(usr,2*times) == True:
 			return True
 		else:
 			return False
-	if rule_num == 'd1'  and flags.find(rule_num)>=0:
-		if len(lottle_num) == 8 and  cut_num(lottle_num) == True and user_min_money(usr,2) == True:
+	if rule_num == 'ren4'  and flags.find(rule_num)>=0:
+		if len(lottle_num) == 8 and  cut_num(lottle_num) == True and user_min_money(usr,2*times) == True:
 			return True
 		else:
 			return False
-	if rule_num == 'e1' and flags.find(rule_num)>=0:
-		if len(lottle_num) == 10 and  cut_num(lottle_num) == True and user_min_money(usr,2) == True:
+	if rule_num == 'ren5' and flags.find(rule_num)>=0:
+		if len(lottle_num) == 10 and  cut_num(lottle_num) == True and user_min_money(usr,2*times) == True:
 			return True
 		else:
 			return False
-	if rule_num == 'f1' or rule_num == 'f2' and flags.find(rule_num)>=0:
-		if len(lottle_num) == 12 and  cut_num(lottle_num) == True and user_min_money(usr,12) == True:
+	if rule_num == '6-5' and flags.find(rule_num)>=0:
+		if len(lottle_num) == 12 and  cut_num(lottle_num) == True and user_min_money(usr,12*times) == True:
 			return True
 		else:
 			return False
-	if rule_num == 'g1' or rule_num == 'g2' or rule_num == 'g3' and flags.find(rule_num)>=0:
-		if len(lottle_num) == 14 and  cut_num(lottle_num) == True and user_min_money(usr,43) == True:
+	if rule_num == '7-5'  and flags.find(rule_num)>=0:
+		if len(lottle_num) == 14 and  cut_num(lottle_num) == True and user_min_money(usr,42*times) == True:
 			return True
 		else:
 			return False
-	if rule_num == 'h1' or rule_num == 'h2' or rule_num == 'h3'  or rule_num == 'h4' and flags.find(rule_num)>=0:
-		if len(lottle_num) == 16 and  cut_num(lottle_num) == True and user_min_money(usr,112) == True:
+	if rule_num == '8-5' and flags.find(rule_num)>=0:
+		if len(lottle_num) == 16 and  cut_num(lottle_num) == True and user_min_money(usr,112*times) == True:
 			return True
 		else:
 			return False
@@ -259,8 +293,10 @@ def user_add_money(user_name,count):
 		f.close()
 		
 def user_min_money(user_name,count):
+
 	user_name = user_name.encode('utf-8')
 	result = True
+	print count
 	try:
 		f = shelve.open('user.db','c')
 		if f.has_key(user_name):
@@ -296,7 +332,7 @@ def get_usr_count(usr_name):
 		if f.has_key(usr_name):
 			print usr_name
 			itchat.send('%s\n%s\n%s' % (u'======== 查询结果========',time.strftime('%Y-%m-%d %H:%M:%S'), f[usr_name]), qun_id)
-			print ('%s\n%s\n%s' % ('======== user_money_result========',time.strftime('%Y-%m-%d %H:%M:%S'), f[usr_name]), qun_id)
+			#print ('%s\n%s\n%s' % ('======== user_money_result========',time.strftime('%Y-%m-%d %H:%M:%S'), f[usr_name]), qun_id)
 		else:
 			print 'not found user'
 	finally:
@@ -304,6 +340,7 @@ def get_usr_count(usr_name):
 	
 #检测聊天记录是否以"touzhu"开头,如果是则将消息检测后存入"lottle_order.txt"表(文本),并将消息计入日志
 def check_order(usr,content):
+	global qun_id
 	content = content.encode('utf-8')
 	
 	name = mange_config('get','new_section','manage_name','nothing')
@@ -313,7 +350,8 @@ def check_order(usr,content):
 			with open ('lottle_order.txt','a') as f:
 				f.write(usr+ ' ' +content + '\n')
 		else:
-			print u'格式错误,余额不足,模式已关闭'
+			itchat.send('%s' % (u'==格式错误or余额不足or模式已关闭=='), qun_id)
+			#print u'格式错误,余额不足,模式已关闭'
 
 def check_and_do_manage(usr,content):
 	'i am in check_and_do_manage'
@@ -342,7 +380,7 @@ def init_data():
 		conf.add_section("new_section")
 		conf.set("new_section", "start_flag", "stop")
 		conf.set("new_section", "delay_time", "60")
-		conf.set("new_section", "lottle_flag", "a1 b1 c1 d1 e1 f1 f2 g1 g2 g3 h1 h2 h3 h4 z1 z2")
+		conf.set("new_section", "lottle_flag", "ren1 ren2 ren3 ren4 ren5 6-5 7-5 8-5 zu3 qian3")
 		conf.write(open("wx.conf","w"))
 	if os.path.exists('lottle_order.txt'):
 		with open('lottle_order.txt','w') as f:
@@ -399,8 +437,8 @@ def group_reply_text(msg):
 						if mange_config('get','new_section','start_flag','nothing')  == 'start':
 							check_order(username,msg['Content'])
 						if mange_config('get','new_section','start_flag','nothing')  == 'stop':
-							#itchat.send('%s' % (u'======== 封板期间,无法投注========'), qun_id)
-							print('%s' % ('======== lottle_stop,cannot do it========'), qun_id)
+							itchat.send('%s' % (u'======== 封板期间,无法投注========'), qun_id)
+							#print('%s' % ('======== lottle_stop,cannot do it========'), qun_id)
 							
 					if msg['Content'].split(' ')[0] == 'guanli':
 						check_and_do_manage(username,msg['Content'])
@@ -426,6 +464,7 @@ def kaijiang(qun_id):
 		while True:
 			try:
 				r = requests.post('http://sxhb.ws1.zs-zc.net/api/AwardNum/LottAwardInfoList',{'lott': '07', 'size': '20'})
+				#r = requests.get('http://45.32.50.28:9999')
 				result = r.json()[0]['RaffleNumber']
 				result_time_hour = int(r.json()[0]['CreateTime'].split(' ')[1].split(':')[0])
 				result_time_min = int(r.json()[0]['CreateTime'].split(' ')[1].split(':')[1])
@@ -444,21 +483,21 @@ def kaijiang(qun_id):
 			if result_tmp != 'tmp_str':
 				if result_tmp != result:
 					print 1
-					#itchat.send('%s\n%s\n%s\n%s' % (u'======== 开奖结果========',r.json()[0]['CreateTime'], r.json()[0]['IssueName'],result), qun_id)
-					print('%s\n%s\n%s\n%s' % ('======== lottole_result========',r.json()[0]['CreateTime'], r.json()[0]['IssueName'],result), qun_id)
+					itchat.send('%s\n%s\n%s\n%s\n%s\n%s' % (u'======== 开奖结果========',r.json()[0]['CreateTime'], r.json()[0]['IssueName'],result,u'走势图','http://sxhb.wx.zs-zc.net/AwardNum/HappyTenMin?lott=07'), qun_id)
+					#print('%s\n%s\n%s\n%s' % ('======== lottole_result========',r.json()[0]['CreateTime'], r.json()[0]['IssueName'],result), qun_id)
 					mange_config('set','new_section','start_flag','stop')
 					#开始统计上轮中奖结果（需要reply线程记录上轮的投注消息）
 					winning_check(result)
 					#告诉reply线程开始响应下轮投注消息
 					time.sleep(1)
 					mange_config('set','new_section','start_flag','start')
-					#itchat.send('%s\n%s\n' % (u'======== 开始投注========',int(r.json()[0]['IssueName'])+1), qun_id)
-					print('%s\n%s\n' % ('======== start_lotlle========',int(r.json()[0]['IssueName'])+1), qun_id)
+					itchat.send('%s\n%s\n' % (u'======== 开始投注========',int(r.json()[0]['IssueName'])+1), qun_id)
+					#print('%s\n%s\n' % ('======== start_lotlle========',int(r.json()[0]['IssueName'])+1), qun_id)
 					time_to_sleep = 600 - (convert2timestamp(network_time(r.headers['Date'])) - convert2timestamp(r.json()[0]['CreateTime'])) - 15 - int(mange_config('get','new_section','delay_time','nothing'))
 					time.sleep(time_to_sleep)
 					mange_config('set','new_section','start_flag','stop')
-					#itchat.send('%s\n%s\n%s' % (u'======== 系统封板========',time.strftime('%Y-%m-%d %H:%M:%S'),u'以上投注有效,现在停止接单'), qun_id)
-					print('%s\n%s\n%s' % ('======== stop_lootle========',time.strftime('%Y-%m-%d %H:%M:%S'),'haha'), qun_id)
+					itchat.send('%s\n%s\n%s' % (u'======== 系统封板========',time.strftime('%Y-%m-%d %H:%M:%S'),u'以上投注有效,现在停止接单'), qun_id)
+					#print('%s\n%s\n%s' % ('======== stop_lootle========',time.strftime('%Y-%m-%d %H:%M:%S'),'haha'), qun_id)
 			result_tmp = result
 		time.sleep(15)
 if __name__ == "__main__":
